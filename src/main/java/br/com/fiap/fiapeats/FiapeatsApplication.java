@@ -9,5 +9,4 @@ public class FiapeatsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FiapeatsApplication.class, args);
 	}
-
 }

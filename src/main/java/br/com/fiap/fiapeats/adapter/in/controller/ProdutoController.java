@@ -4,8 +4,9 @@ import br.com.fiap.fiapeats.adapter.in.controller.contracts.request.ProdutoReque
 import br.com.fiap.fiapeats.adapter.in.controller.contracts.response.ProdutoResponse;
 import br.com.fiap.fiapeats.adapter.in.utils.ImageUtils;
 import br.com.fiap.fiapeats.core.domain.Produto;
+import br.com.fiap.fiapeats.core.ports.in.BuscarProdutosUseCasePort;
 import br.com.fiap.fiapeats.core.ports.in.ProdutoUseCasePort;
-import io.swagger.v3.oas.annotations.Parameter;
+//import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.websocket.server.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -29,6 +32,9 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoUseCasePort useCase;
+
+    @Autowired
+    private BuscarProdutosUseCasePort buscarProdutosUseCasePort;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> cadastrarProduto(@RequestParam(required = true) String nome,
@@ -49,11 +55,11 @@ public class ProdutoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> consultarProduto(@PathParam("id") Long id) throws Exception {
-        logger.info("Requisição para consultar produto recebida");
+        logger.info("Requisição para consultar produto de ID ="+ id +  " recebida");
 
         var produto = useCase.consultar(id);
 
-        if (produto.getId() == null){
+        if (produto.getId() == null) {
             return ResponseEntity.status(404).body("Produto não encontrado");
         }
 
@@ -65,6 +71,68 @@ public class ProdutoController {
 
         return ResponseEntity.status(200)
                 .contentType(MediaType.valueOf(IMAGE_PNG_VALUE))
+                .body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> listarTodosProdutos() throws Exception {
+        logger.info("Requisição para listar todos produtos recebida");
+
+        var produtos = buscarProdutosUseCasePort.listarProdutos();
+
+        if ((long) produtos.size() == 0) {
+            return ResponseEntity.status(404).body("Não tem produtos cadastrados");
+        }
+
+        logger.info("Produtos encontrado com sucesso");
+
+        List<ProdutoResponse> response = new ArrayList<>();
+
+        produtos.forEach( produto -> {
+            ProdutoResponse produtoResponse = new ProdutoResponse(
+                    produto.getNome(),
+                    produto.getDescricao(),
+                    produto.getCategoria(),
+                    produto.getValor(),
+                    produto.getFoto()
+            );
+            response.add(produtoResponse);
+        });
+
+
+        return ResponseEntity.status(200)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<Object> consultarProdutoPorCategoria(@PathVariable("categoria") String categoria) throws Exception {
+        logger.info("Requisição para consultar produto por categoria recebida");
+
+        var produtos = buscarProdutosUseCasePort.consultarProdutoPorCategoria(categoria);
+
+        if ((long) produtos.size() == 0) {
+            return ResponseEntity.status(404).body("Não tem produtos dessa categoria");
+        }
+
+        logger.info("Produtos encontrado com sucesso");
+
+        List<ProdutoResponse> response = new ArrayList<>();
+
+        produtos.forEach( produto -> {
+                    ProdutoResponse produtoResponse = new ProdutoResponse(
+                            produto.getNome(),
+                            produto.getDescricao(),
+                            produto.getCategoria(),
+                            produto.getValor(),
+                            produto.getFoto()
+                    );
+                    response.add(produtoResponse);
+                });
+
+
+        return ResponseEntity.status(200)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }
 }

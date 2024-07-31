@@ -7,6 +7,7 @@ import br.com.fiap.fiapeats.core.ports.out.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,5 +24,18 @@ public class ProdutoRepositoryImpl implements ProdutoRepository {
     @Override
     public Optional<ProdutoEntity> consultar(Long id) {
         return produtoRepositoryJPA.findById(id);
+    }
+
+    @Override
+    public List<ProdutoEntity> GetProdutos(){
+        return produtoRepositoryJPA.findAll();
+    }
+
+
+    public  List<ProdutoEntity> GetProdutosByCategoria(String categoria){
+        return produtoRepositoryJPA.findAll()
+                .stream()
+                .filter(x -> x.getCategoria().equalsIgnoreCase(categoria))
+                .toList();
     }
 }

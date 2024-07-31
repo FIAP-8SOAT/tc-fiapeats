@@ -7,7 +7,10 @@ import br.com.fiap.fiapeats.core.ports.out.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CriarProdutoUseCase implements ProdutoUseCasePort {
@@ -33,4 +36,6 @@ public class CriarProdutoUseCase implements ProdutoUseCasePort {
                 produtoEntity.getFoto())).orElseGet(Produto::new);
 
     }
+
+
 }
