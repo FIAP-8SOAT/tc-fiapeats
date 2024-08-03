@@ -21,6 +21,7 @@ public class BuscarProdutoUseCase implements BuscarProdutosUseCasePort {
         var produtosEntity = produtoRepository.GetProdutosByCategoria(categoria);
         List<Produto> produtos = new ArrayList<>();
         produtosEntity.forEach(produtoEntity -> {
+            System.out.println("passando pelo produto entity com id = "+ produtoEntity.getId().toString());
             Produto  produto = new Produto(
                     produtoEntity.getId(),
                     produtoEntity.getNome(),
@@ -29,6 +30,7 @@ public class BuscarProdutoUseCase implements BuscarProdutosUseCasePort {
                     produtoEntity.getCategoria(),
                     produtoEntity.getFoto());
             produtos.add(produto);
+            System.out.println("produto com id = "+ produto.getId().toString() +"adicionado");
         });
         return produtos;
 

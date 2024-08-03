@@ -54,7 +54,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> consultarProduto(@PathParam("id") Long id) throws Exception {
+    public ResponseEntity<Object> consultarProduto(@PathVariable("id") Long id) throws Exception {
         logger.info("Requisição para consultar produto de ID ="+ id +  " recebida");
 
         var produto = useCase.consultar(id);
@@ -71,7 +71,7 @@ public class ProdutoController {
 
         return ResponseEntity.status(200)
                 .contentType(MediaType.valueOf(IMAGE_PNG_VALUE))
-                .body(response);
+                .body(response.getFoto());
     }
 
     @GetMapping
@@ -114,7 +114,6 @@ public class ProdutoController {
         if ((long) produtos.size() == 0) {
             return ResponseEntity.status(404).body("Não tem produtos dessa categoria");
         }
-
         logger.info("Produtos encontrado com sucesso");
 
         List<ProdutoResponse> response = new ArrayList<>();
