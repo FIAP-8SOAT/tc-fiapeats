@@ -17,10 +17,10 @@ VALUES (9.90, 1, 'fc7c7f37-32ea-465c-ac4b-490685e5a55f', 'pao, salsicha, molho e
 INSERT INTO PRODUTO(valor, categoria_id, id, descricao, nome, imagem_url)
 VALUES (6, 3, 'fa0f9dde-b305-407b-869c-71045853dea8', 'Refrigerante 600ml de garrafa', 'Pepsi 600ml', 'https://io.convertiez.com.br/m/trimais/shop/products/images/846/medium/refrigerante-pepsi-600-ml_842.jpg');
 
-INSERT INTO PEDIDO(tempo_espera, valor_total, data_hora_criacao, id_status, id_pedido, cliente_documento)
-VALUES (10, 99.80, NOW(), 1, 'd212192c-8155-440a-9eda-3d77732458bb', null);
-INSERT INTO PEDIDO(tempo_espera, valor_total, data_hora_criacao, id_status, id_pedido, cliente_documento)
-VALUES (10, 275.01, NOW(), 1, '6d597e32-62b5-4b1e-9696-eb794bbae188', '98765467862');
+INSERT INTO PEDIDO(tempo_espera, valor_total, data_hora_criacao, id_status, id_pedido, cliente_documento, id_pagamento)
+VALUES (10, 99.80, NOW(), 1, 'd212192c-8155-440a-9eda-3d77732458bb', null, 0);
+INSERT INTO PEDIDO(tempo_espera, valor_total, data_hora_criacao, id_status, id_pedido, cliente_documento, id_pagamento)
+VALUES (10, 275.01, NOW(), 1, '6d597e32-62b5-4b1e-9696-eb794bbae188', '98765467862', 0);
 
 INSERT INTO PEDIDO_PRODUTOS(pedido_entity_id_pedido, produtos_id)
 VALUES ('d212192c-8155-440a-9eda-3d77732458bb', 'fc7c7f37-32ea-465c-ac4b-490685e5a55f');
